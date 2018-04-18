@@ -31,6 +31,7 @@ static void help(void) {
 }
 
 /* Converts a byte array to the Base58Check representation. */
+/* The output buffer is expected to hold at least `size+1` bytes of data. */
 static void base58check(const void* data, size_t size, char* buffer) {
 	static const char base58check[58] =
 		"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
