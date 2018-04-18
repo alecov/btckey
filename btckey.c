@@ -103,9 +103,15 @@ int main(int argc, char* argv[]) {
 	{
 		unsigned char buffer1[37];
 		unsigned char buffer2[52];
+		size_t index;
 
 		/* Get private key. */
 		EC_KEY_priv2oct(key, buffer1 + 1, 32);
+
+		/* Print private key. */
+		for (index = 0; index < 32; ++index)
+			printf("%02X", buffer1[index + 1]);
+		putchar('\n');
 
 		/* Prepend version prefix. */
 		buffer1[0] = !testnet ? 0x80 : 0xEF;
@@ -121,7 +127,7 @@ int main(int argc, char* argv[]) {
 		/* Append checksum. */
 		memcpy(buffer1 + 33, buffer2, 4);
 
-		/* Convert to Base58Check. */
+		/* Convert to Base58Check and print private key in WIF. */
 		base58check(buffer1, 37, (char*)buffer2);
 		printf("%s\n", buffer2);
 	}
@@ -161,7 +167,7 @@ int main(int argc, char* argv[]) {
 		/* Append checksum. */
 		memcpy(buffer2 + 21, buffer1, 4);
 
-		/* Convert to Base58Check. */
+		/* Convert to Base58Check and print Bitcoin address. */
 		base58check(buffer2, 25, (char*)buffer1);
 		printf("%s\n", buffer1);
 	}
