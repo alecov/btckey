@@ -171,5 +171,10 @@ int main(int argc, char* argv[]) {
 		base58check(buffer2, 25, (char*)buffer1);
 		printf("%s\n", buffer1);
 	}
+
+	/* Free OpenSSL stuff. */
+	EC_KEY_free(key);
+	EVP_MD_CTX_free(evp_md);
+	BN_CTX_free(bn);
 	return EXIT_SUCCESS;
 }
