@@ -137,12 +137,20 @@ int main(int argc, char* argv[]) {
 	{
 		unsigned char buffer1[65];
 		unsigned char buffer2[32];
+		size_t index;
 
 		/* Get public key. */
 		const EC_GROUP* group = EC_KEY_get0_group(key);
 		const EC_POINT* point = EC_KEY_get0_public_key(key);
+
+		/* Get raw public key. */
 		EC_POINT_point2oct(group, point, POINT_CONVERSION_UNCOMPRESSED,
 			buffer1, 65, bn);
+
+		/* Print uncompressed public key. */
+		for (index = 0; index < 65; ++index)
+			printf("%02X", buffer1[index]);
+		putchar('\n');
 
 		/* Calculate SHA-256. */
 		EVP_DigestInit(evp_md, EVP_sha256());
@@ -153,6 +161,11 @@ int main(int argc, char* argv[]) {
 		EVP_DigestInit(evp_md, EVP_ripemd160());
 		EVP_DigestUpdate(evp_md, buffer2, 32);
 		EVP_DigestFinal_ex(evp_md, buffer2 + 1, NULL);
+
+		/* Print HASH160 of public key. */
+		for (index = 0; index < 20; ++index)
+			printf("%02X", buffer2[index + 1]);
+		putchar('\n');
 
 		/* Prepend version information. */
 		buffer2[0] = !testnet ? 0 : 0x6F;
